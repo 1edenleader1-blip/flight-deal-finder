@@ -21,7 +21,7 @@ email:
   subject_prefix: "✈️ Weekly Flight Deals"
 
 defaults:
-  currency: "USD"           # ISO currency code prices are shown in
+  currency: "NZD"           # ISO currency code prices are shown in
   results_per_search: 5     # how many top itineraries to show per saved search
   search_window_days: 365   # how far ahead to look for cheap dates
 
@@ -31,17 +31,11 @@ defaults:
 # ------------------------------------------------------------
 searches:
   - name: "Wellington to Delhi"
-    origin: "WLG"          # IATA airport/city code
+    origin: "WEL"          # IATA airport/city code
     destination: "DEL"     # IATA airport/city code
     nights:
-<<<<<<< HEAD
-      min: 6
-      max: 9
-=======
       min: 20
       max: 30
-    max_stopovers: 2
->>>>>>> d82f9ef2777a8c730918059b3e33beb45622aa83
 
   - name: "Auckland to Bali"
     origin: "AKL"
