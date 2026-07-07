@@ -31,7 +31,7 @@ defaults:
 # ------------------------------------------------------------
 searches:
   - name: "Wellington to Delhi"
-    origin: "WEL"          # IATA airport/city code
+    origin: "WLG"          # IATA airport/city code
     destination: "DEL"     # IATA airport/city code
     nights:
       min: 20
