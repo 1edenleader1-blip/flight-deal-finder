@@ -12,19 +12,18 @@
 email:
   # Address the email will be sent FROM (must match the Gmail
   # account you generated the app password for).
-  from_address: "your-gmail-address@gmail.com"
+  from_address: 1edenleader1@gmail.com
 
   # Who receives the weekly summary. Add as many as you like.
   recipients:
-    - "you@example.com"
+    - callsumit@gmail.com
 
   subject_prefix: "✈️ Weekly Flight Deals"
 
 defaults:
-  currency: "USD"           # ISO currency code prices are shown in
-  results_per_search: 5     # how many top itineraries to show per saved search (used when results_mode is "top_n")
+  currency: "NZD"           # ISO currency code prices are shown in
+  results_per_search: 5     # how many top itineraries to show per saved search
   search_window_days: 365   # how far ahead to look for cheap dates
-  results_mode: "top_n"     # "top_n" = cheapest N overall; "monthly" = cheapest fare for each calendar month
 
 # ------------------------------------------------------------
 # Saved searches. Add/remove/edit as many blocks as you want.
@@ -32,12 +31,11 @@ defaults:
 # ------------------------------------------------------------
 searches:
   - name: "Wellington to Delhi"
-    origin: "WLG"
-    destination: "DEL"
+    origin: "WLG"          # IATA airport/city code
+    destination: "DEL"     # IATA airport/city code
     nights:
-      min: 20
+      min: 10
       max: 30
-    results_mode: "monthly"   # cheapest fare per month, up to 12 rows
 
   - name: "Auckland to Bali"
     origin: "AKL"
