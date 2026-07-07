@@ -117,9 +117,10 @@ def _one_way_candidates(origin: str, destination: str, month: str, currency: str
     query = """
     query($origin: String!, $destination: String!, $month: [Date!]!, $limit: Int!, $currency: String!) {
       prices_one_way(
-        params: { origin: $origin, destination: $destination, depart_months: $month, currency: $currency }
+        params: { origin: $origin, destination: $destination, depart_months: $month }
         paging: { limit: $limit, offset: 0 }
         sorting: VALUE_ASC
+        currency: $currency
       ) {
         departure_at
         value
