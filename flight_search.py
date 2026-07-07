@@ -141,7 +141,12 @@ def _one_way_candidates(origin: str, destination: str, month: str, currency: str
             headers={**_headers(), "Content-Type": "application/json"},
             timeout=20,
         )
-        resp.raise_for_status()
+        if resp.status_code >= 400:
+            print(
+                f"  !! one-way GraphQL request failed for {origin}->{destination} {month}: "
+                f"{resp.status_code} - {resp.text[:500]}"
+            )
+            return []
         payload = resp.json()
     except Exception as e:
         print(f"  !! one-way GraphQL request failed for {origin}->{destination} {month}: {e}")
