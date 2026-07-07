@@ -34,7 +34,7 @@ searches:
     origin: "WLG"          # IATA airport/city code
     destination: "DEL"     # IATA airport/city code
     nights:
-      min: 20
+      min: 10
       max: 30
 
   - name: "Auckland to Bali"
