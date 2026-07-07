@@ -115,7 +115,7 @@ def _round_trip_calendar(origin: str, destination: str, month: str, nights: int,
 def _one_way_candidates(origin: str, destination: str, month: str, currency: str, limit: int = 8) -> list[dict]:
     """Cheapest one-way fares found for `month`, via GraphQL, cheapest first."""
     query = """
-    query($origin: String!, $destination: String!, $month: String!, $limit: Int!) {
+    query($origin: String!, $destination: String!, $month: [Date!]!, $limit: Int!) {
       prices_one_way(
         params: { origin: $origin, destination: $destination, depart_months: $month }
         paging: { limit: $limit, offset: 0 }
@@ -131,7 +131,7 @@ def _one_way_candidates(origin: str, destination: str, month: str, currency: str
     variables = {
         "origin": origin,
         "destination": destination,
-        "month": f"{month}-01",
+        "month": [f"{month}-01"],
         "limit": limit,
     }
     try:
