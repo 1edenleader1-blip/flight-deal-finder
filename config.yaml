@@ -12,11 +12,11 @@
 email:
   # Address the email will be sent FROM (must match the Gmail
   # account you generated the app password for).
-  from_address: "your-gmail-address@gmail.com"
+  from_address: 1edenleader1@gmail.com
 
   # Who receives the weekly summary. Add as many as you like.
   recipients:
-    - "you@example.com"
+    - callsumit@gmail.com
 
   subject_prefix: "✈️ Weekly Flight Deals"
 
@@ -30,12 +30,18 @@ defaults:
 # Any field you omit falls back to the value in `defaults` above.
 # ------------------------------------------------------------
 searches:
-  - name: "Auckland to Tokyo"
-    origin: "AKL"          # IATA airport/city code
-    destination: "NRT"     # IATA airport/city code
+  - name: "Wellington to Delhi"
+    origin: "WLG"          # IATA airport/city code
+    destination: "DEL"     # IATA airport/city code
     nights:
+<<<<<<< HEAD
       min: 6
       max: 9
+=======
+      min: 20
+      max: 30
+    max_stopovers: 2
+>>>>>>> d82f9ef2777a8c730918059b3e33beb45622aa83
 
   - name: "Auckland to Bali"
     origin: "AKL"
