@@ -30,8 +30,8 @@ defaults:
 # Any field you omit falls back to the value in `defaults` above.
 # ------------------------------------------------------------
 searches:
-  - name: "Wellington to Delhi"
-    origin: "WLG"          # IATA airport/city code
+  - name: "Auckland to Delhi"
+    origin: "AKL"          # IATA airport/city code
     destination: "DEL"     # IATA airport/city code
     nights:
       min: 10
