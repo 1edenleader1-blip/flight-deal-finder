@@ -2,13 +2,14 @@ name: Weekly Flight Deal Search
 
 on:
   schedule:
+    # Every Monday at 06:00 UTC. Adjust to your timezone —
+    # cron times here are always UTC.
     - cron: "0 6 * * 1"
-  workflow_dispatch: {}
+  workflow_dispatch: {}   # lets you trigger it manually from the Actions tab
 
 jobs:
   search-and-email:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -20,7 +21,8 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
-- name: Debug secrets presence
+
+      - name: Debug secrets presence
         env:
           DUFFEL_API_KEY: ${{ secrets.DUFFEL_API_KEY }}
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
@@ -29,5 +31,10 @@ jobs:
           echo "DUFFEL_API_KEY length: ${#DUFFEL_API_KEY}"
           echo "GMAIL_ADDRESS length: ${#GMAIL_ADDRESS}"
           echo "GMAIL_APP_PASSWORD length: ${#GMAIL_APP_PASSWORD}"
-        run: python main.py
 
+      - name: Run flight search and send email
+        env:
+          DUFFEL_API_KEY: ${{ secrets.DUFFEL_API_KEY }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python main.py
