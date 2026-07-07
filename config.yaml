@@ -1,0 +1,60 @@
+# ============================================================
+# Flight Deal Finder — configuration
+# ============================================================
+# Edit this file to define WHAT to search for and WHERE to send
+# results. You can define multiple "saved searches" — each one
+# is a route + date rule that gets searched and reported every
+# week. Sensitive values (Duffel API key, Gmail app password) do
+# NOT go here — they're set as GitHub Secrets (see README.md).
+#
+# NOTE ON CURRENCY: Duffel prices offers in your Duffel account's
+# billing currency, which you set once in the Duffel dashboard
+# (Settings) — not per-search here.
+# ============================================================
+
+email:
+  # Address the email will be sent FROM (must match the Gmail
+  # account you generated the app password for).
+  from_address: "your-gmail-address@gmail.com"
+
+  # Who receives the weekly summary. Add as many as you like.
+  recipients:
+    - "you@example.com"
+
+  subject_prefix: "✈️ Weekly Flight Deals"
+
+defaults:
+  results_per_search: 5      # how many top itineraries to show per saved search
+  search_window_days: 365    # how far ahead to look for cheap dates
+  date_sample_interval_days: 14  # sample a date combo every N days across the window
+  max_stopovers: 2           # max connections allowed, per direction
+  adults: 1
+  max_parallel_requests: 6   # concurrent API calls — raise/lower if you hit rate limits
+
+# ------------------------------------------------------------
+# Saved searches. Add/remove/edit as many blocks as you want.
+# Any field you omit falls back to the value in `defaults` above.
+# ------------------------------------------------------------
+searches:
+  - name: "Auckland to Tokyo"
+    origin: "AKL"          # IATA airport/city code
+    destination: "NRT"     # IATA airport/city code
+    nights:
+      min: 6
+      max: 9
+    max_stopovers: 1
+
+  - name: "Auckland to Bali"
+    origin: "AKL"
+    destination: "DPS"
+    nights:
+      min: 7
+      max: 14
+
+  # Add more blocks like this for additional routes:
+  # - name: "Auckland to Sydney"
+  #   origin: "AKL"
+  #   destination: "SYD"
+  #   nights:
+  #     min: 3
+  #     max: 5
