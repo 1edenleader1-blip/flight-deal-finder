@@ -115,11 +115,12 @@ def _round_trip_calendar(origin: str, destination: str, month: str, nights: int,
 def _one_way_candidates(origin: str, destination: str, month: str, currency: str, limit: int = 8) -> list[dict]:
     """Cheapest one-way fares found for `month`, via GraphQL, cheapest first."""
     query = """
-    query($origin: String!, $destination: String!, $month: String!, $limit: Int!) {
+    query($origin: String!, $destination: String!, $month: [Date!]!, $limit: Int!, $currency: String!) {
       prices_one_way(
         params: { origin: $origin, destination: $destination, depart_months: $month }
         paging: { limit: $limit, offset: 0 }
         sorting: VALUE_ASC
+        currency: $currency
       ) {
         departure_at
         value
@@ -131,8 +132,9 @@ def _one_way_candidates(origin: str, destination: str, month: str, currency: str
     variables = {
         "origin": origin,
         "destination": destination,
-        "month": f"{month}-01",
+        "month": [f"{month}-01"],
         "limit": limit,
+        "currency": currency,
     }
     try:
         resp = requests.post(
@@ -141,7 +143,12 @@ def _one_way_candidates(origin: str, destination: str, month: str, currency: str
             headers={**_headers(), "Content-Type": "application/json"},
             timeout=20,
         )
-        resp.raise_for_status()
+        if resp.status_code >= 400:
+            print(
+                f"  !! one-way GraphQL request failed for {origin}->{destination} {month}: "
+                f"{resp.status_code} - {resp.text[:500]}"
+            )
+            return []
         payload = resp.json()
     except Exception as e:
         print(f"  !! one-way GraphQL request failed for {origin}->{destination} {month}: {e}")
@@ -240,3 +247,17 @@ def rank_and_trim(results: list[dict], top_n: int) -> list[dict]:
         if len(trimmed) >= top_n:
             break
     return trimmed
+
+
+def cheapest_per_month(results: list[dict]) -> list[dict]:
+    """
+    Returns one entry per calendar month (whichever departure month a result
+    falls in) — the cheapest fare found for that month — ordered
+    chronologically. Months with no results are simply absent.
+    """
+    best_per_month = {}
+    for r in results:
+        month_key = r["depart_date"][:7]  # 'YYYY-MM'
+        if month_key not in best_per_month or r["price"] < best_per_month[month_key]["price"]:
+            best_per_month[month_key] = r
+    return [best_per_month[m] for m in sorted(best_per_month.keys())]

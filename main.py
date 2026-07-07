@@ -12,7 +12,7 @@ or let the GitHub Actions workflow run it weekly.
 import sys
 import yaml
 
-from flight_search import search_route, rank_and_trim, FlightSearchError
+from flight_search import search_route, rank_and_trim, cheapest_per_month, FlightSearchError
 from emailer import build_html, send_email
 
 
@@ -35,11 +35,15 @@ def main():
 
     for search_cfg in searches:
         name = search_cfg.get("name", f"{search_cfg.get('origin')} -> {search_cfg.get('destination')}")
+        results_mode = search_cfg.get("results_mode", defaults.get("results_mode", "top_n"))
         top_n = search_cfg.get("results_per_search", defaults.get("results_per_search", 5))
         print(f"Searching: {name} ...")
         try:
             itineraries = search_route(search_cfg, defaults)
-            top = rank_and_trim(itineraries, top_n)
+            if results_mode == "monthly":
+                top = cheapest_per_month(itineraries)
+            else:
+                top = rank_and_trim(itineraries, top_n)
             print(f"  -> {len(itineraries)} raw results, {len(top)} kept")
             results_by_search[name] = top
         except FlightSearchError as e:
