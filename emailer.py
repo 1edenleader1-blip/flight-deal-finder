@@ -5,11 +5,6 @@ Builds an HTML summary of this week's flight deals and sends it via
 Gmail SMTP using an app password (not your real Gmail password).
 
 Setup: https://myaccount.google.com/apppasswords
-
-Note: Duffel is a booking-platform API, not a metasearch site, so there's
-no public "click to book" link to include. Each entry gives you the exact
-price, dates, and airline(s) — you then search those same dates on the
-airline's site (or Google Flights) to actually book.
 """
 
 import os
@@ -55,17 +50,29 @@ def build_html(results_by_search: dict) -> str:
                 "<span style='background:#e6f4ea;color:#1e7e34;padding:2px 8px;"
                 "border-radius:10px;font-size:12px;margin-left:6px'>single ticket</span>"
             )
+
+            airlines_str = ", ".join(it.get("airlines") or []) or "—"
+            stops = it.get("stops")
+            stops_str = f"{stops} stop(s)" if stops is not None else "see link"
+
+            links = it.get("booking_links") or []
+            if links:
+                link_str = " · ".join(
+                    f"<a href='{l}' style='color:#0b5fff;text-decoration:none'>Book {idx+1}</a>"
+                    for idx, l in enumerate(links)
+                )
+            else:
+                link_str = "<span style='color:#aaa'>search manually</span>"
+
             rows += f"""
             <tr style='border-bottom:1px solid #eee'>
               <td style='padding:10px 8px'>
                 <strong style='font-size:16px'>{it['price']:.2f} {it['currency']}</strong>{badge}
               </td>
               <td style='padding:10px 8px'>{it['depart_date']} → {it['return_date']}</td>
-              <td style='padding:10px 8px'>{', '.join(it['airlines']) or '—'}</td>
-              <td style='padding:10px 8px'>
-                {it['stops']} stop(s) total<br>
-                <span style='color:#888;font-size:12px'>~{it['duration_hours']}h total flying time</span>
-              </td>
+              <td style='padding:10px 8px'>{airlines_str}</td>
+              <td style='padding:10px 8px'>{stops_str}</td>
+              <td style='padding:10px 8px'>{link_str}</td>
             </tr>"""
 
         sections.append(f"""
@@ -76,7 +83,8 @@ def build_html(results_by_search: dict) -> str:
               <th style='padding:8px'>Price</th>
               <th style='padding:8px'>Dates</th>
               <th style='padding:8px'>Airline(s)</th>
-              <th style='padding:8px'>Stops / Duration</th>
+              <th style='padding:8px'>Stops</th>
+              <th style='padding:8px'></th>
             </tr>
           </thead>
           <tbody>{rows}</tbody>
@@ -90,15 +98,16 @@ def build_html(results_by_search: dict) -> str:
         <h1 style='color:#0b5fff'>Weekly Flight Deals — {today_str}</h1>
         {body}
         <p style='color:#999;font-size:12px;margin-top:30px'>
-          Fares from the Duffel API, sampled across your search window — verify
-          exact price and availability before booking (search these dates
-          directly on the airline's site or Google Flights, since there's no
-          booking link here). "2 separate bookings" itineraries combine an
-          outbound and inbound flight from different airlines as two
-          independent tickets — if the first flight is delayed and you miss
-          the second, neither airline is obligated to rebook you the way
-          they would on a single ticket, so build in a buffer or extra
-          travel insurance if you go this route.
+          Fares from Travelpayouts' cached search data — always verify the
+          exact price and availability before booking, since these prices
+          are drawn from recent searches rather than a live guaranteed
+          quote. "2 separate bookings" itineraries combine an outbound and
+          inbound flight as two independent tickets — if the first flight
+          is delayed and you miss the second, neither airline is obligated
+          to rebook you the way they would on a single ticket, so build in
+          a buffer or extra travel insurance if you go this route. Entries
+          without a "Book" link had no direct link available — search those
+          dates manually on the airline's site or Google Flights.
         </p>
       </body>
     </html>

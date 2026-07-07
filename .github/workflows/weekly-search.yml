@@ -24,7 +24,7 @@ jobs:
 
       - name: Run flight search and send email
         env:
-          DUFFEL_API_KEY: ${{ secrets.DUFFEL_API_KEY }}
+          TRAVELPAYOUTS_TOKEN: ${{ secrets.TRAVELPAYOUTS_TOKEN }}
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
         run: python main.py
