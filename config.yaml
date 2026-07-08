@@ -36,7 +36,8 @@ searches:
     nights:
       min: 10
       max: 30
-
+    results_mode: "monthly"
+    
   - name: "Auckland to Bali"
     origin: "AKL"
     destination: "DPS"
