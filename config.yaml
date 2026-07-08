@@ -45,6 +45,7 @@ searches:
       min: 7
       max: 14
     currency: "NZD"
+    results_mode: "monthly"
 
   # Add more blocks like this for additional routes:
   # - name: "Auckland to Sydney"
