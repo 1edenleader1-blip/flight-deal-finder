@@ -38,9 +38,9 @@ searches:
       max: 30
     results_mode: "monthly"
     
-  - name: "Auckland to Bali"
-    origin: "AKL"
-    destination: "DPS"
+  - name: "Wellington to Auckland"
+    origin: "WLG"
+    destination: "AKL"
     nights:
       min: 7
       max: 14
